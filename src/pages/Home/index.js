@@ -1,20 +1,32 @@
 import React, {useState, useEffect} from 'react';
+import { useDispatch } from 'react-redux';
+import { addReserveRequest  } from '../../store/modules/reserve/actions';
 import { MdFlightTakeoff } from 'react-icons/md';
+
 import api from '../../services/api';
 import './style.css';
 
-export default function Home() {
+export default function Home({ history }) {
+  const dispatch = useDispatch();
   const [trips, setTrips] = useState([]);
 
   useEffect(() => {
-    async function loadTrps() {
+
+    async function loadApi() {
       const response = await api.get('trips');
       setTrips(response.data);
 
       
     }
-    loadTrps();
+    loadApi();
   }, []);
+
+  function handleAdd(id) {
+    dispatch(addReserveRequest(id));
+   
+
+  }
+
 
   return (
     <div>
@@ -26,7 +38,7 @@ export default function Home() {
       <span>Status: {trip.status ? 'Disponivel' : 'Indisponivel'}</span>
 
       <button type='button'
-      onClick={() => {}}
+      onClick={() => handleAdd(trip.id)}
 
        >
       <div>
